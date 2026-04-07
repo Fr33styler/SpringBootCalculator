@@ -32,9 +32,9 @@ public class UserController {
         service.addUser("your_username", passwordEncoder.encode("your_password"), "ADMIN");
     }*/
 
-    @PostMapping("/addNewUser")
-    public ResponseEntity<String> addNewUser(@RequestParam String username, @RequestParam String password, @RequestParam String role) {
-        if (service.addUser(username, passwordEncoder.encode(password), role)) {
+    @PostMapping("/addNewAccount")
+    public ResponseEntity<String> addNewAccount(@RequestParam String username, @RequestParam String password, @RequestParam String role) {
+        if (service.addAccount(username, passwordEncoder.encode(password), role)) {
             return ResponseEntity.ok("User has been added successfully!");
         }
         return ResponseEntity.badRequest().body("User already exists!");

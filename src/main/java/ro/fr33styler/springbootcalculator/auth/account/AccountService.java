@@ -14,7 +14,7 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private AccountRepository repository;
 
-    public boolean addUser(String username, String password, String role) {
+    public boolean addAccount(String username, String password, String role) {
         if (repository.existsByUsername(username)) {
             return false;
         }
