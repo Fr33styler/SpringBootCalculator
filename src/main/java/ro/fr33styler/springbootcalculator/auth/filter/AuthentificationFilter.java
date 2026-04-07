@@ -33,16 +33,16 @@ public class AuthentificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
 
-        String filterToken = null;
+        String token = null;
         String username = null;
 
         if (header != null && header.startsWith("Bearer ")) {
-            filterToken = header.substring(7);
-            username = jwtService.getUsernameFromToken(filterToken);
+            token = header.substring(7);
+            username = jwtService.getUsernameFromToken(token);
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = accountService.loadUserByUsername(username);
-            if (jwtService.isTokenValid(filterToken, userDetails)) {
+            if (jwtService.isTokenValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);

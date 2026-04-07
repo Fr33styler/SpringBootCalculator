@@ -1,8 +1,9 @@
 package ro.fr33styler.springbootcalculator.calculator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ro.fr33styler.springbootcalculator.auth.JwtService;
 import ro.fr33styler.springbootcalculator.calculator.history.History;
 import ro.fr33styler.springbootcalculator.calculator.history.UserHistoryService;
 
@@ -18,73 +19,84 @@ public class CalculatorController {
     @Autowired
     private UserHistoryService userHistoryService;
 
-    @Autowired
-    private JwtService jwtService;
-
     private static final MathContext MATH_CONTEXT = new MathContext(10, RoundingMode.HALF_UP);
 
     @GetMapping("/history")
-    public List<History> getHistory(@RequestHeader("Authorization") String authorization) {
-        String username = jwtService.getUsernameFromToken(authorization.substring(7));
-        return userHistoryService.getHistoriesByUsername(username);
+    public List<History> getHistory() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) return List.of();
+
+        return userHistoryService.getHistoriesByUsername(authentication.getName());
     }
 
     @GetMapping("/add")
-    public BigDecimal add(@RequestHeader("Authorization") String authorization, @RequestParam BigDecimal a, @RequestParam BigDecimal b) {
+    public BigDecimal add(@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
         BigDecimal result = a.add(b);
 
-        String username = jwtService.getUsernameFromToken(authorization.substring(7));
-        userHistoryService.appendHistory(username, new History("add", a, b, result));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) return result;
+
+        userHistoryService.appendHistory(authentication.getName(), new History("add", a, b, result));
 
         return result;
     }
 
     @GetMapping("/subtract")
-    public BigDecimal subtract(@RequestHeader("Authorization") String authorization, @RequestParam BigDecimal a, @RequestParam BigDecimal b) {
+    public BigDecimal subtract(@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
         BigDecimal result = a.subtract(b);
 
-        String username = jwtService.getUsernameFromToken(authorization.substring(7));
-        userHistoryService.appendHistory(username, new History("subtract", a, b, result));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) return result;
+
+        userHistoryService.appendHistory(authentication.getName(), new History("subtract", a, b, result));
 
         return result;
     }
 
     @GetMapping("/multiply")
-    public BigDecimal multiply(@RequestHeader("Authorization") String authorization, @RequestParam BigDecimal a, @RequestParam BigDecimal b) {
+    public BigDecimal multiply(@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
         BigDecimal result = a.multiply(b);
 
-        String username = jwtService.getUsernameFromToken(authorization.substring(7));
-        userHistoryService.appendHistory(username, new History("multiply", a, b, result));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) return result;
+
+        userHistoryService.appendHistory(authentication.getName(), new History("multiply", a, b, result));
 
         return result;
     }
 
     @GetMapping("/divide")
-    public BigDecimal divide(@RequestHeader("Authorization") String authorization, @RequestParam BigDecimal a, @RequestParam BigDecimal b) {
+    public BigDecimal divide(@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
         BigDecimal result = a.divide(b, MATH_CONTEXT);
 
-        String username = jwtService.getUsernameFromToken(authorization.substring(7));
-        userHistoryService.appendHistory(username, new History("divide", a, b, result));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) return result;
+
+        userHistoryService.appendHistory(authentication.getName(), new History("divide", a, b, result));
 
         return result;
     }
 
     @GetMapping("/sqrt")
-    public BigDecimal sqrt(@RequestHeader("Authorization") String authorization, @RequestParam BigDecimal a) {
+    public BigDecimal sqrt(@RequestParam BigDecimal a) {
         BigDecimal result = a.sqrt(MATH_CONTEXT);
 
-        String username = jwtService.getUsernameFromToken(authorization.substring(7));
-        userHistoryService.appendHistory(username, new History("sqrt", a, null, result));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) return result;
+
+        userHistoryService.appendHistory(authentication.getName(), new History("sqrt", a, null, result));
 
         return result;
     }
 
     @GetMapping("/power")
-    public BigDecimal power(@RequestHeader("Authorization") String authorization, @RequestParam BigDecimal a, @RequestParam int b) {
+    public BigDecimal power(@RequestParam BigDecimal a, @RequestParam int b) {
         BigDecimal result = a.pow(b, MATH_CONTEXT);
 
-        String username = jwtService.getUsernameFromToken(authorization.substring(7));
-        userHistoryService.appendHistory(username, new History("power", a, BigDecimal.valueOf(b), result));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) return result;
+
+        userHistoryService.appendHistory(authentication.getName(), new History("power", a, BigDecimal.valueOf(b), result));
 
         return result;
     }
