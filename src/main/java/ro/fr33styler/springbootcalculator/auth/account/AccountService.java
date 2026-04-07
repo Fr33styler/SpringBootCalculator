@@ -24,7 +24,7 @@ public class AccountService implements UserDetailsService {
 
     @NonNull
     public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
-        Account account = repository.getUserByUsername(username);
+        Account account = repository.getAccountByUsername(username);
 
         if (account == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);

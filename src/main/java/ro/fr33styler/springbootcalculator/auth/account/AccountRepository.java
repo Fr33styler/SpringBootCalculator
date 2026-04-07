@@ -8,6 +8,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     boolean existsByUsername(String username);
 
-    Account getUserByUsername(String username);
+    Account getAccountByUsername(String username);
 
 }
