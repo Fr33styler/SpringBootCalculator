@@ -30,6 +30,26 @@ public class AccountService implements UserDetailsService {
         return false;
     }
 
+    public boolean changeAccountRole(String username, String newRole) {
+        Account account = repository.getAccountByUsername(username);
+        if (account == null) return false;
+
+        account.setRole(newRole);
+
+        repository.save(account);
+        return true;
+    }
+
+    public boolean changeAccountPassword(String username, String newPassword) {
+        Account account = repository.getAccountByUsername(username);
+        if (account == null) return false;
+
+        account.setPassword(newPassword);
+
+        repository.save(account);
+        return true;
+    }
+
     @NonNull
     public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         Account account = repository.getAccountByUsername(username);

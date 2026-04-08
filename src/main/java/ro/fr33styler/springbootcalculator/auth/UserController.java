@@ -35,17 +35,33 @@ public class UserController {
     @PostMapping("/addNewAccount")
     public ResponseEntity<String> addNewAccount(@RequestParam String username, @RequestParam String password, @RequestParam String role) {
         if (service.addAccount(username, passwordEncoder.encode(password), role)) {
-            return ResponseEntity.ok("User has been added successfully!");
+            return ResponseEntity.ok("Account has been added successfully!");
         }
-        return ResponseEntity.badRequest().body("User already exists!");
+        return ResponseEntity.badRequest().body("Account already exists!");
     }
 
     @DeleteMapping("/removeAccount")
     public ResponseEntity<String> removeAccount(@RequestParam String username) {
         if (service.deleteAccount(username)) {
-            return ResponseEntity.ok("User has been removed successfully!");
+            return ResponseEntity.ok("Account has been removed successfully!");
         }
-        return ResponseEntity.badRequest().body("User does not exist!");
+        return ResponseEntity.badRequest().body("Account does not exist!");
+    }
+
+    @PutMapping("/changeAccountPassword")
+    public ResponseEntity<String> changeAccountPassword(@RequestParam String username, @RequestParam String newPassword) {
+        if (service.changeAccountPassword(username, passwordEncoder.encode(newPassword))) {
+            return ResponseEntity.ok("The password has been changed successfully!");
+        }
+        return ResponseEntity.badRequest().body("Account does not exist!");
+    }
+
+    @PutMapping("/changeAccountRole")
+    public ResponseEntity<String> changeAccountRole(@RequestParam String username, @RequestParam String newRole) {
+        if (service.changeAccountRole(username, newRole)) {
+            return ResponseEntity.ok("The role has been changed successfully!");
+        }
+        return ResponseEntity.badRequest().body("Account does not exist!");
     }
 
     @PostMapping("/generateToken")
@@ -55,7 +71,7 @@ public class UserController {
             if (authentication.isAuthenticated()) {
                 return ResponseEntity.ok(jwtService.createToken(username));
             } else {
-                return ResponseEntity.badRequest().body("Invalid user request!");
+                return ResponseEntity.badRequest().body("Invalid account request!");
             }
         } catch (AuthenticationException exception) {
             return ResponseEntity.badRequest().body(exception.getMessage());
