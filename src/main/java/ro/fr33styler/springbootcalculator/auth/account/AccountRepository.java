@@ -10,4 +10,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Account getAccountByUsername(String username);
 
+    void deleteAccountByUsername(String username);
+
 }

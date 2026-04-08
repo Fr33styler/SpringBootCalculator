@@ -40,6 +40,14 @@ public class UserController {
         return ResponseEntity.badRequest().body("User already exists!");
     }
 
+    @DeleteMapping("/removeAccount")
+    public ResponseEntity<String> removeAccount(@RequestParam String username) {
+        if (service.deleteAccount(username)) {
+            return ResponseEntity.ok("User has been removed successfully!");
+        }
+        return ResponseEntity.badRequest().body("User does not exist!");
+    }
+
     @PostMapping("/generateToken")
     public ResponseEntity<String> authenticateAndGetToken(@RequestParam String username, @RequestParam String password) {
         try {

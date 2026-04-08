@@ -22,6 +22,14 @@ public class AccountService implements UserDetailsService {
         return true;
     }
 
+    public boolean deleteAccount(String username) {
+        if (repository.existsByUsername(username)) {
+            repository.deleteAccountByUsername(username);
+            return true;
+        }
+        return false;
+    }
+
     @NonNull
     public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         Account account = repository.getAccountByUsername(username);
