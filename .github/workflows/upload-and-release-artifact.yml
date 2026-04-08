@@ -1,0 +1,51 @@
+name: Upload And Release Artifact
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  upload_and_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: maven
+      - name: Set up MySQL
+        run: |
+          sudo systemctl start mysql
+          mysql -uroot -proot <<EOF
+          CREATE DATABASE IF NOT EXISTS calculator;
+          CREATE USER IF NOT EXISTS 'fr33styler'@'localhost' IDENTIFIED BY 'admin';
+          GRANT ALL PRIVILEGES ON calculator.* TO 'fr33styler'@'localhost';
+          FLUSH PRIVILEGES;
+          EOF
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Package
+          archive: false
+          path: target/SpringBootCalculator*.jar
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: maven
+      - name: Upload Release Artifact
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ steps.release.outputs.tag_name }} target/SpringBootCalculator*.jar
