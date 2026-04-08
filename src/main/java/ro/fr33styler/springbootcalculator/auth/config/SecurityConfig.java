@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/generateToken").permitAll()
-                        .requestMatchers("/auth/addNewUser").hasAuthority("ADMIN")
+                        .requestMatchers("/auth/addNewAccount").hasAuthority("ADMIN")
 
                         .anyRequest().authenticated()
                 )
