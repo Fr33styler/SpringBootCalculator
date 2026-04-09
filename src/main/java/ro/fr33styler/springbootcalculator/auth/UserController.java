@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.badRequest().body("Account does not exist!");
     }
 
-    @PutMapping("/changeAccountPassword")
+    @PatchMapping("/changeAccountPassword")
     public ResponseEntity<String> changeAccountPassword(@RequestParam String username, @RequestParam String newPassword) {
         if (service.changeAccountPassword(username, passwordEncoder.encode(newPassword))) {
             return ResponseEntity.ok("The password has been changed successfully!");
@@ -50,7 +50,7 @@ public class UserController {
         return ResponseEntity.badRequest().body("Account does not exist!");
     }
 
-    @PutMapping("/changeAccountRole")
+    @PatchMapping("/changeAccountRole")
     public ResponseEntity<String> changeAccountRole(@RequestParam String username, @RequestParam String newRole) {
         if (service.changeAccountRole(username, newRole)) {
             return ResponseEntity.ok("The role has been changed successfully!");
