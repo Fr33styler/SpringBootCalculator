@@ -18,17 +18,14 @@ public class UserHistory {
     private String username;
 
     @OneToMany(mappedBy = "userHistory", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<History> histories;
+    private List<History> histories = new ArrayList<>();
 
-    public UserHistory() {
-        histories = new ArrayList<>();
-    }
+    public UserHistory() {}
 
     public UserHistory(@NonNull String username) {
         Objects.requireNonNull(username, "username cannot be null!");
 
         this.username = username;
-        this.histories = new ArrayList<>();
     }
 
     public long getId() {
