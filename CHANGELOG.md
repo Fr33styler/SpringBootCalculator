@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.0](https://github.com/Fr33styler/SpringBootCalculator/compare/v0.0.1...v0.1.0) (2026-04-09)
+
+
+### Features
+
+* Added changeAccountPassword and changeAccountRole ([6814ffb](https://github.com/Fr33styler/SpringBootCalculator/commit/6814ffb176e9caea509073b2c4cd1b502b2e1f27))
+* Added deleteAccount rest api. ([8b15afd](https://github.com/Fr33styler/SpringBootCalculator/commit/8b15afd9cb489f69b610380e4e771f6a6d663919))
+* Added transactional to make sure all queries happen in one go ([52f2854](https://github.com/Fr33styler/SpringBootCalculator/commit/52f2854f7c67bef3dbd01cc01b6eea5ddc81c34b))
+* Now userHistory and History are mapped together to remove the creation of a third table that had to map them together instead. ([52f2854](https://github.com/Fr33styler/SpringBootCalculator/commit/52f2854f7c67bef3dbd01cc01b6eea5ddc81c34b))
+
 ## 0.0.1 (2026-04-08)
 
 
