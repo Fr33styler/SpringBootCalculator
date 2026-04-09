@@ -19,13 +19,9 @@ public class Account {
     public Account() {}
 
     public Account(@NonNull String username, @NonNull String password, @NonNull String role) {
-        Objects.requireNonNull(username, "username cannot be null!");
-        Objects.requireNonNull(password, "password cannot be null!");
-        Objects.requireNonNull(role, "role cannot be null!");
-
-        this.username = username;
-        this.password = password;
-        this.role = role;
+        setUsername(username);
+        setPassword(password);
+        setRole(role);
     }
 
     public long getId() {
