@@ -17,7 +17,7 @@ public class UserHistory {
 
     private String username;
 
-    @OneToMany(mappedBy = "userHistory", cascade = CascadeType.ALL, orphanRemoval = true, fetch =  FetchType.LAZY)
+    @OneToMany(mappedBy = "userHistory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<History> histories;
 
     public UserHistory() {
