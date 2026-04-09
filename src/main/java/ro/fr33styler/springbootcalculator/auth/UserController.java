@@ -26,12 +26,6 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    /* TODO Add default admin here!
-    @PostConstruct
-    public void init() {
-        service.addUser("your_username", passwordEncoder.encode("your_password"), "ADMIN");
-    }*/
-
     @PostMapping("/addNewAccount")
     public ResponseEntity<String> addNewAccount(@RequestParam String username, @RequestParam String password, @RequestParam String role) {
         if (service.addAccount(username, passwordEncoder.encode(password), role)) {

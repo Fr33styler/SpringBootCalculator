@@ -1,14 +1,13 @@
 package ro.fr33styler.springbootcalculator.calculator.history;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-@Entity(name = "histories")
+@Entity
+@Table(name = "history")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class History {
 
@@ -19,6 +18,11 @@ public class History {
     private BigDecimal a;
     private BigDecimal b;
     private BigDecimal result;
+
+    @ManyToOne
+    @JoinColumn(name = "user_history_id")
+    @JsonBackReference
+    private UserHistory userHistory;
 
     public History() {}
 
@@ -47,6 +51,14 @@ public class History {
 
     public BigDecimal getResult() {
         return result;
+    }
+
+    public UserHistory getUserHistory() {
+        return userHistory;
+    }
+
+    void setUserHistory(UserHistory userHistory) {
+        this.userHistory = userHistory;
     }
 
 }

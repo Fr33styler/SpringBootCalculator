@@ -1,11 +1,12 @@
 package ro.fr33styler.springbootcalculator.auth.account;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.jspecify.annotations.NonNull;
 
-@Entity(name = "accounts")
+import java.util.Objects;
+
+@Entity
+@Table(name = "accounts")
 public class Account {
 
     @Id
@@ -17,7 +18,11 @@ public class Account {
 
     public Account() {}
 
-    public Account(String username, String password, String role) {
+    public Account(@NonNull String username, @NonNull String password, @NonNull String role) {
+        Objects.requireNonNull(username, "username cannot be null!");
+        Objects.requireNonNull(password, "password cannot be null!");
+        Objects.requireNonNull(role, "role cannot be null!");
+
         this.username = username;
         this.password = password;
         this.role = role;
@@ -27,27 +32,36 @@ public class Account {
         return id;
     }
 
+    @NonNull
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(@NonNull String username) {
+        Objects.requireNonNull(username, "username cannot be null!");
+
         this.username = username;
     }
 
+    @NonNull
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@NonNull String password) {
+        Objects.requireNonNull(password, "password cannot be null!");
+
         this.password = password;
     }
 
+    @NonNull
     public String getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(@NonNull String role) {
+        Objects.requireNonNull(role, "role cannot be null!");
+
         this.role = role;
     }
 

@@ -1,5 +1,6 @@
 package ro.fr33styler.springbootcalculator.auth.account;
 
+import jakarta.transaction.Transactional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -14,6 +15,7 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private AccountRepository repository;
 
+    @Transactional
     public boolean addAccount(String username, String password, String role) {
         if (repository.existsByUsername(username)) {
             return false;
@@ -22,6 +24,7 @@ public class AccountService implements UserDetailsService {
         return true;
     }
 
+    @Transactional
     public boolean deleteAccount(String username) {
         if (repository.existsByUsername(username)) {
             repository.deleteAccountByUsername(username);
@@ -30,23 +33,21 @@ public class AccountService implements UserDetailsService {
         return false;
     }
 
+    @Transactional
     public boolean changeAccountRole(String username, String newRole) {
         Account account = repository.getAccountByUsername(username);
         if (account == null) return false;
 
         account.setRole(newRole);
-
-        repository.save(account);
         return true;
     }
 
+    @Transactional
     public boolean changeAccountPassword(String username, String newPassword) {
         Account account = repository.getAccountByUsername(username);
         if (account == null) return false;
 
         account.setPassword(newPassword);
-
-        repository.save(account);
         return true;
     }
 

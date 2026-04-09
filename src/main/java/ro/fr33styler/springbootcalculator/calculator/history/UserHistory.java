@@ -1,10 +1,15 @@
 package ro.fr33styler.springbootcalculator.calculator.history;
 
 import jakarta.persistence.*;
+import org.jspecify.annotations.NonNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
-@Entity(name = "user_history")
+@Entity
+@Table(name = "user_history")
 public class UserHistory {
 
     @Id
@@ -13,24 +18,31 @@ public class UserHistory {
 
     private String username;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "userHistory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<History> histories;
 
-    public UserHistory() {}
+    public UserHistory() {
+        histories = new ArrayList<>();
+    }
 
-    public UserHistory(String username, List<History> histories) {
+    public UserHistory(@NonNull String username, @NonNull Collection<History> histories) {
+        Objects.requireNonNull(username, "username cannot be null!");
+        Objects.requireNonNull(histories, "The histories cannot be null!");
+
         this.username = username;
-        this.histories = histories;
+        this.histories = new ArrayList<>(histories);
     }
 
     public long getId() {
         return id;
     }
 
+    @NonNull
     public String getUsername() {
         return username;
     }
 
+    @NonNull
     public List<History> getHistories() {
         return histories;
     }
