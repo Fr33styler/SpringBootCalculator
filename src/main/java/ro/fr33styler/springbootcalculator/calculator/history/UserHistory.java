@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,19 +17,18 @@ public class UserHistory {
 
     private String username;
 
-    @OneToMany(mappedBy = "userHistory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "userHistory", cascade = CascadeType.ALL, orphanRemoval = true, fetch =  FetchType.LAZY)
     private List<History> histories;
 
     public UserHistory() {
         histories = new ArrayList<>();
     }
 
-    public UserHistory(@NonNull String username, @NonNull Collection<History> histories) {
+    public UserHistory(@NonNull String username) {
         Objects.requireNonNull(username, "username cannot be null!");
-        Objects.requireNonNull(histories, "The histories cannot be null!");
 
         this.username = username;
-        this.histories = new ArrayList<>(histories);
+        this.histories = new ArrayList<>();
     }
 
     public long getId() {
