@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ro.fr33styler.springbootcalculator.calculator.history.History;
+import ro.fr33styler.springbootcalculator.calculator.history.HistoryDTO;
 import ro.fr33styler.springbootcalculator.calculator.history.UserHistoryService;
 
 import java.math.BigDecimal;
@@ -21,7 +22,7 @@ public class CalculatorController {
     private static final MathContext MATH_CONTEXT = new MathContext(10, RoundingMode.HALF_UP);
 
     @GetMapping("/history")
-    public List<History> getHistory(Authentication authentication) {
+    public List<HistoryDTO> getHistory(Authentication authentication) {
         return userHistoryService.getHistoriesByUsername(authentication.getName());
     }
 
