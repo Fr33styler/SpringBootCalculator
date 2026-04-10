@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,11 +31,18 @@ public class UserHistoryService {
         entityManager.persist(history);
     }
 
-    public List<History> getHistoriesByUsername(String username) {
+    public List<HistoryDTO> getHistoriesByUsername(String username) {
         UserHistory userHistory = repository.getUserHistoryByUsername(username);
-        if (userHistory == null) return List.of();
+        if (userHistory == null) return new ArrayList<>(0);
 
-        return List.copyOf(userHistory.getHistories());
+        List<History> histories = userHistory.getHistories();
+
+        List<HistoryDTO> dtoHistories = new ArrayList<>(histories.size());
+
+        for (History history : histories) {
+            dtoHistories.add(new HistoryDTO(history));
+        }
+        return dtoHistories;
     }
 
 }

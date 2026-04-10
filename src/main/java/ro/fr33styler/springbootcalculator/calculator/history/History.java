@@ -1,14 +1,11 @@
 package ro.fr33styler.springbootcalculator.calculator.history;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "history")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class History {
 
     @Id
@@ -21,7 +18,6 @@ public class History {
 
     @ManyToOne
     @JoinColumn(name = "user_history_id")
-    @JsonBackReference
     private UserHistory userHistory;
 
     public History() {}
