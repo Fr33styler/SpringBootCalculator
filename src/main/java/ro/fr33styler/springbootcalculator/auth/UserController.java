@@ -9,6 +9,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ro.fr33styler.springbootcalculator.auth.account.AccountService;
+import ro.fr33styler.springbootcalculator.auth.request.AuthRequest;
+import ro.fr33styler.springbootcalculator.auth.request.ChangePasswordRequest;
+import ro.fr33styler.springbootcalculator.auth.request.NewAccountRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,8 +30,8 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/addNewAccount")
-    public ResponseEntity<String> addNewAccount(@RequestParam String username, @RequestParam String password, @RequestParam String role) {
-        if (service.addAccount(username, passwordEncoder.encode(password), role)) {
+    public ResponseEntity<String> addNewAccount(@RequestBody NewAccountRequest request) {
+        if (service.addAccount(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getRole())) {
             return ResponseEntity.ok("Account has been added successfully!");
         }
         return ResponseEntity.badRequest().body("Account already exists!");
@@ -43,8 +46,8 @@ public class UserController {
     }
 
     @PatchMapping("/changeAccountPassword")
-    public ResponseEntity<String> changeAccountPassword(@RequestParam String username, @RequestParam String newPassword) {
-        if (service.changeAccountPassword(username, passwordEncoder.encode(newPassword))) {
+    public ResponseEntity<String> changeAccountPassword(@RequestBody ChangePasswordRequest request) {
+        if (service.changeAccountPassword(request.getUsername(), passwordEncoder.encode(request.getNewPassword()))) {
             return ResponseEntity.ok("The password has been changed successfully!");
         }
         return ResponseEntity.badRequest().body("Account does not exist!");
@@ -59,11 +62,11 @@ public class UserController {
     }
 
     @PostMapping("/generateToken")
-    public ResponseEntity<String> authenticateAndGetToken(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<String> authenticateAndGetToken(@RequestBody AuthRequest request) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             if (authentication.isAuthenticated()) {
-                return ResponseEntity.ok(jwtService.createToken(username));
+                return ResponseEntity.ok(jwtService.createToken(request.getUsername()));
             } else {
                 return ResponseEntity.badRequest().body("Invalid account request!");
             }

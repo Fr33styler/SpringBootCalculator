@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user_history")
+@Table(name = "user_history", indexes = @Index(name = "user_history_indexes", columnList = "username"))
 public class UserHistory {
 
     @Id
