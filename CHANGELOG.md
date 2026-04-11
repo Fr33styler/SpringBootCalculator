@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.1](https://github.com/Fr33styler/SpringBootCalculator/compare/v0.1.0...v0.1.1) (2026-04-11)
+
+
+### Bug Fixes
+
+* Fixed the N + 1 problem inside appendHistory method ([ff764ff](https://github.com/Fr33styler/SpringBootCalculator/commit/ff764ff316f439a73ed6e7e1d98459b67bd7707f))
+* Made a HistoryRepository that handles the userhistory instead of entity manager ([b7fc5af](https://github.com/Fr33styler/SpringBootCalculator/commit/b7fc5af2f5d55454201b0d32a4505dde5275fe01))
+* Now the passwords are sent in the body of the request ([b7fc5af](https://github.com/Fr33styler/SpringBootCalculator/commit/b7fc5af2f5d55454201b0d32a4505dde5275fe01))
+
 ## [0.1.0](https://github.com/Fr33styler/SpringBootCalculator/compare/v0.0.1...v0.1.0) (2026-04-09)
 
 
