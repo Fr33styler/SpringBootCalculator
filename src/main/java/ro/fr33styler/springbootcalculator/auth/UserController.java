@@ -28,7 +28,7 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/{username}/{role}")
-    public ResponseEntity<String> postAccount(@PathVariable String username, @PathVariable String role, @RequestBody PasswordRequest request) {
+    public ResponseEntity<String> createAccount(@PathVariable String username, @PathVariable String role, @RequestBody PasswordRequest request) {
         if (service.addAccount(username, passwordEncoder.encode(request.getPassword()), role)) {
             return ResponseEntity.ok("Account has been added successfully!");
         }
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PatchMapping("/{username}/password")
-    public ResponseEntity<String> pathAccountPassword(@PathVariable String username, @RequestBody PasswordRequest request) {
+    public ResponseEntity<String> updateAccountPassword(@PathVariable String username, @RequestBody PasswordRequest request) {
         if (service.changeAccountPassword(username, passwordEncoder.encode(request.getPassword()))) {
             return ResponseEntity.ok("The password has been changed successfully!");
         }
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @PatchMapping("/{username}/role/{role}")
-    public ResponseEntity<String> patchAccountRole(@PathVariable String username, @PathVariable String role) {
+    public ResponseEntity<String> updateAccountRole(@PathVariable String username, @PathVariable String role) {
         if (service.changeAccountRole(username, role)) {
             return ResponseEntity.ok("The role has been changed successfully!");
         }

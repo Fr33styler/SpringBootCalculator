@@ -22,7 +22,7 @@ public class CalculatorController {
     private static final MathContext MATH_CONTEXT = new MathContext(10, RoundingMode.HALF_UP);
 
     @GetMapping("/histories")
-    public List<HistoryDTO> getHistory(Authentication authentication) {
+    public List<HistoryDTO> getHistories(Authentication authentication) {
         return userHistoryService.getHistoriesByUsername(authentication.getName());
     }
 
