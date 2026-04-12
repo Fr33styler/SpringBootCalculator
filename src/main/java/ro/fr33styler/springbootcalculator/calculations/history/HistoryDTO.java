@@ -1,4 +1,4 @@
-package ro.fr33styler.springbootcalculator.calculator.history;
+package ro.fr33styler.springbootcalculator.calculations.history;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jspecify.annotations.NonNull;

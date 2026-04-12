@@ -1,11 +1,11 @@
-package ro.fr33styler.springbootcalculator.calculator;
+package ro.fr33styler.springbootcalculator.calculations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ro.fr33styler.springbootcalculator.calculator.history.History;
-import ro.fr33styler.springbootcalculator.calculator.history.HistoryDTO;
-import ro.fr33styler.springbootcalculator.calculator.history.UserHistoryService;
+import ro.fr33styler.springbootcalculator.calculations.history.History;
+import ro.fr33styler.springbootcalculator.calculations.history.HistoryDTO;
+import ro.fr33styler.springbootcalculator.calculations.history.UserHistoryService;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

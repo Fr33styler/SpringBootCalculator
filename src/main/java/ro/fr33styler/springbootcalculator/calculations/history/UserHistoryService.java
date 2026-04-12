@@ -1,4 +1,4 @@
-package ro.fr33styler.springbootcalculator.calculator.history;
+package ro.fr33styler.springbootcalculator.calculations.history;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
