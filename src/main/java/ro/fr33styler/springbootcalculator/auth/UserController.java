@@ -1,6 +1,7 @@
 package ro.fr33styler.springbootcalculator.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,12 +10,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ro.fr33styler.springbootcalculator.auth.account.AccountService;
-import ro.fr33styler.springbootcalculator.auth.request.AuthRequest;
-import ro.fr33styler.springbootcalculator.auth.request.ChangePasswordRequest;
-import ro.fr33styler.springbootcalculator.auth.request.NewAccountRequest;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth/accounts")
 public class UserController {
 
     @Autowired
@@ -29,49 +27,49 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/addNewAccount")
-    public ResponseEntity<String> addNewAccount(@RequestBody NewAccountRequest request) {
-        if (service.addAccount(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getRole())) {
+    @PostMapping("/{username}/{role}")
+    public ResponseEntity<String> postAccount(@PathVariable String username, @PathVariable String role, @RequestBody PasswordRequest request) {
+        if (service.addAccount(username, passwordEncoder.encode(request.getPassword()), role)) {
             return ResponseEntity.ok("Account has been added successfully!");
         }
-        return ResponseEntity.badRequest().body("Account already exists!");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Account already exists!");
     }
 
-    @DeleteMapping("/removeAccount")
-    public ResponseEntity<String> removeAccount(@RequestParam String username) {
+    @DeleteMapping("/{username}")
+    public ResponseEntity<String> deleteAccount(@RequestParam String username) {
         if (service.deleteAccount(username)) {
             return ResponseEntity.ok("Account has been removed successfully!");
         }
-        return ResponseEntity.badRequest().body("Account does not exist!");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist!");
     }
 
-    @PatchMapping("/changeAccountPassword")
-    public ResponseEntity<String> changeAccountPassword(@RequestBody ChangePasswordRequest request) {
-        if (service.changeAccountPassword(request.getUsername(), passwordEncoder.encode(request.getNewPassword()))) {
+    @PatchMapping("/{username}/password")
+    public ResponseEntity<String> pathAccountPassword(@PathVariable String username, @RequestBody PasswordRequest request) {
+        if (service.changeAccountPassword(username, passwordEncoder.encode(request.getPassword()))) {
             return ResponseEntity.ok("The password has been changed successfully!");
         }
-        return ResponseEntity.badRequest().body("Account does not exist!");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist!");
     }
 
-    @PatchMapping("/changeAccountRole")
-    public ResponseEntity<String> changeAccountRole(@RequestParam String username, @RequestParam String newRole) {
-        if (service.changeAccountRole(username, newRole)) {
+    @PatchMapping("/{username}/role/{role}")
+    public ResponseEntity<String> patchAccountRole(@PathVariable String username, @PathVariable String role) {
+        if (service.changeAccountRole(username, role)) {
             return ResponseEntity.ok("The role has been changed successfully!");
         }
-        return ResponseEntity.badRequest().body("Account does not exist!");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist!");
     }
 
-    @PostMapping("/generateToken")
-    public ResponseEntity<String> authenticateAndGetToken(@RequestBody AuthRequest request) {
+    @PostMapping("/token/{username}")
+    public ResponseEntity<String> generateToken(@PathVariable String username, @RequestBody PasswordRequest request) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, request.getPassword()));
             if (authentication.isAuthenticated()) {
-                return ResponseEntity.ok(jwtService.createToken(request.getUsername()));
+                return ResponseEntity.ok(jwtService.createToken(username));
             } else {
                 return ResponseEntity.badRequest().body("Invalid account request!");
             }
         } catch (AuthenticationException exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getMessage());
         }
     }
 }
