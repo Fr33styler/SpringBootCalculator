@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/calculations")
-public class CalculatorController {
+public class CalculationsController {
 
     @Autowired
     private UserHistoryService userHistoryService;
