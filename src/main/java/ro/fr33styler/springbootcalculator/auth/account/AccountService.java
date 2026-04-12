@@ -34,7 +34,7 @@ public class AccountService implements UserDetailsService {
     }
 
     @Transactional
-    public boolean changeAccountRole(String username, String newRole) {
+    public boolean updateAccountRole(String username, String newRole) {
         Account account = repository.getAccountByUsername(username);
         if (account == null) return false;
 
@@ -43,7 +43,7 @@ public class AccountService implements UserDetailsService {
     }
 
     @Transactional
-    public boolean changeAccountPassword(String username, String newPassword) {
+    public boolean updateAccountPassword(String username, String newPassword) {
         Account account = repository.getAccountByUsername(username);
         if (account == null) return false;
 

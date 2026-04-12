@@ -45,7 +45,7 @@ public class UserController {
 
     @PatchMapping("/{username}/password")
     public ResponseEntity<String> updateAccountPassword(@PathVariable String username, @RequestBody PasswordRequest request) {
-        if (service.changeAccountPassword(username, passwordEncoder.encode(request.getPassword()))) {
+        if (service.updateAccountPassword(username, passwordEncoder.encode(request.getPassword()))) {
             return ResponseEntity.ok("The password has been changed successfully!");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist!");
@@ -53,7 +53,7 @@ public class UserController {
 
     @PatchMapping("/{username}/role/{role}")
     public ResponseEntity<String> updateAccountRole(@PathVariable String username, @PathVariable String role) {
-        if (service.changeAccountRole(username, role)) {
+        if (service.updateAccountRole(username, role)) {
             return ResponseEntity.ok("The role has been changed successfully!");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist!");
