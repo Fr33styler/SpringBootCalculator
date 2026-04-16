@@ -16,39 +16,43 @@ public class AccountService implements UserDetailsService {
     private AccountRepository repository;
 
     @Transactional
-    public boolean addAccount(String username, String password, String role) {
+    public void addAccount(String username, String password, String role) {
         if (repository.existsByUsername(username)) {
-            return false;
+            throw new UsernameAlreadyExistsException("Username already exists");
         }
+
         repository.save(new Account(username, password, role));
-        return true;
     }
 
     @Transactional
-    public boolean deleteAccount(String username) {
+    public void deleteAccount(String username) throws UsernameNotFoundException {
         if (repository.existsByUsername(username)) {
             repository.deleteAccountByUsername(username);
-            return true;
+        } else {
+            throwUsernameNotFoundException(username);
         }
-        return false;
     }
 
     @Transactional
-    public boolean updateAccountRole(String username, String newRole) {
+    public void updateAccountRole(String username, String newRole) throws UsernameNotFoundException {
         Account account = repository.getAccountByUsername(username);
-        if (account == null) return false;
+
+        if (account == null) {
+            throwUsernameNotFoundException(username);
+        }
 
         account.setRole(newRole);
-        return true;
     }
 
     @Transactional
-    public boolean updateAccountPassword(String username, String newPassword) {
+    public void updateAccountPassword(String username, String newPassword) {
         Account account = repository.getAccountByUsername(username);
-        if (account == null) return false;
+
+        if (account == null) {
+            throwUsernameNotFoundException(username);
+        }
 
         account.setPassword(newPassword);
-        return true;
     }
 
     @NonNull
@@ -56,7 +60,7 @@ public class AccountService implements UserDetailsService {
         Account account = repository.getAccountByUsername(username);
 
         if (account == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throwUsernameNotFoundException(username);
         }
 
         return User.builder()
@@ -64,6 +68,10 @@ public class AccountService implements UserDetailsService {
                 .password(account.getPassword())
                 .authorities(account.getRole())
                 .build();
+    }
+
+    private void throwUsernameNotFoundException(String username) throws UsernameNotFoundException {
+        throw new UsernameNotFoundException("User not found with username: " + username);
     }
 
 }

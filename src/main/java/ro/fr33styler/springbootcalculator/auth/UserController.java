@@ -29,34 +29,26 @@ public class UserController {
 
     @PostMapping("/{username}/{role}")
     public ResponseEntity<String> createAccount(@PathVariable String username, @PathVariable String role, @RequestBody PasswordRequest request) {
-        if (service.addAccount(username, passwordEncoder.encode(request.getPassword()), role)) {
-            return ResponseEntity.ok("Account has been added successfully!");
-        }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Account already exists!");
+        service.addAccount(username, passwordEncoder.encode(request.getPassword()), role);
+        return ResponseEntity.ok("Account has been added successfully!");
     }
 
     @DeleteMapping("/{username}")
     public ResponseEntity<String> deleteAccount(@RequestParam String username) {
-        if (service.deleteAccount(username)) {
-            return ResponseEntity.ok("Account has been removed successfully!");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist!");
+        service.deleteAccount(username);
+        return ResponseEntity.ok("Account has been removed successfully!");
     }
 
     @PatchMapping("/{username}/password")
     public ResponseEntity<String> updateAccountPassword(@PathVariable String username, @RequestBody PasswordRequest request) {
-        if (service.updateAccountPassword(username, passwordEncoder.encode(request.getPassword()))) {
-            return ResponseEntity.ok("The password has been changed successfully!");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist!");
+        service.updateAccountPassword(username, passwordEncoder.encode(request.getPassword()));
+        return ResponseEntity.ok("The password has been changed successfully!");
     }
 
     @PatchMapping("/{username}/role/{role}")
     public ResponseEntity<String> updateAccountRole(@PathVariable String username, @PathVariable String role) {
-        if (service.updateAccountRole(username, role)) {
-            return ResponseEntity.ok("The role has been changed successfully!");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist!");
+        service.updateAccountRole(username, role);
+        return ResponseEntity.ok("The role has been changed successfully!");
     }
 
     @PostMapping("/token/{username}")
