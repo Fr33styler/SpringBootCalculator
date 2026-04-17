@@ -56,7 +56,7 @@ public class UserController {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, request.getPassword()));
             if (authentication.isAuthenticated()) {
-                return ResponseEntity.ok(jwtService.createToken(username));
+                return ResponseEntity.status(HttpStatus.CREATED).body(jwtService.createToken(username));
             } else {
                 return ResponseEntity.badRequest().body("Invalid account request!");
             }
