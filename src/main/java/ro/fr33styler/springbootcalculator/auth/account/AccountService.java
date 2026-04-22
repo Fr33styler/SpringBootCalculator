@@ -3,11 +3,13 @@ package ro.fr33styler.springbootcalculator.auth.account;
 import jakarta.transaction.Transactional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -18,7 +20,7 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public void addAccount(String username, String password, String role) {
         if (repository.existsByUsername(username)) {
-            throw new UsernameAlreadyExistsException("Username already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
         }
 
         repository.save(new Account(username, password, role));
