@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/Fr33styler/SpringBootCalculator/compare/v0.1.1...v0.1.2) (2026-04-22)
+
+
+### Bug Fixes
+
+* Applied @Transactional so the lazy loaded collection wouldn't throw an exception because of the detached entity ([b746b2f](https://github.com/Fr33styler/SpringBootCalculator/commit/b746b2f26855483d008cb6da79c288eaccedcc2c))
+
 ## [0.1.1](https://github.com/Fr33styler/SpringBootCalculator/compare/v0.1.0...v0.1.1) (2026-04-11)
 
 
