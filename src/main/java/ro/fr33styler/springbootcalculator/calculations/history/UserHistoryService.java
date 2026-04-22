@@ -29,6 +29,7 @@ public class UserHistoryService {
         historyRepository.save(history);
     }
 
+    @Transactional
     public List<HistoryDTO> getHistoriesByUsername(String username) {
         UserHistory userHistory = userHistoryRepository.getUserHistoryByUsername(username);
         if (userHistory == null) return new ArrayList<>(0);
